@@ -1,19 +1,69 @@
 // Player object - O Computador deve receber dois personagens para disputar a corrida em um objeto cada
-const player1 = {
-  NOME: "Mario",
-  VELOCIDADE: 4,
-  MANOBRABILIDADE: 3,
-  PODER: 3,
-  PONTOS: 0,
+const characters = [
+  {
+    NOME: "Mario",
+    VELOCIDADE: 4,
+    MANOBRABILIDADE: 3,
+    PODER: 3,
+    PONTOS: 0,
+  },
+  {
+    NOME: "Peach",
+    VELOCIDADE: 3,
+    MANOBRABILIDADE: 4,
+    PODER: 2,
+    PONTOS: 0,
+  },
+  {
+    NOME: "Yoshi",
+    VELOCIDADE: 2,
+    MANOBRABILIDADE: 4,
+    PODER: 3,
+    PONTOS: 0,
+  },
+  {
+    NOME: "Bowser",
+    VELOCIDADE: 5,
+    MANOBRABILIDADE: 2,
+    PODER: 5,
+    PONTOS: 0,
+  },
+  {
+    NOME: "Luigi",
+    VELOCIDADE: 3,
+    MANOBRABILIDADE: 4,
+    PODER: 4,
+    PONTOS: 0,
+  },
+  {
+    NOME: "Donkey Kong",
+    VELOCIDADE: 2,
+    MANOBRABILIDADE: 2,
+    PODER: 5,
+    PONTOS: 0,
+  },
+];
+
+const prompt = require("prompt-sync")({ sigint: true });
+
+const chooseCharacter = (characters, messages) => {
+  console.log(messages);
+  characters.forEach((p, i) => {
+    console.log(`${i + 1} - ${p.NOME}`);
+  });
+
+  let choice;
+  do {
+    choice = parseInt(prompt("Digite o numero do personagem: "));
+  } while (isNaN(choice) || choice < 1 || choice > characters.length);
+
+  return JSON.parse(JSON.stringify(characters[choice - 1]));
 };
 
-const player2 = {
-  NOME: "Luigi",
-  VELOCIDADE: 3,
-  MANOBRABILIDADE: 4,
-  PODER: 4,
-  PONTOS: 0,
-};
+const player1 = chooseCharacter(characters, "Escolha o personagem do player 1:");
+
+const remainingCharacters = characters.filter((p) => p.NOME !== player1.NOME);
+const player2 = chooseCharacter(remainingCharacters, "Escolha o personagem do player 2:");
 
 // Para a batalha da pista, precisamos criar a logica de dados - Roll Dice
 
@@ -123,26 +173,40 @@ const playRaceEngine = async (character1, character2) => {
         character2.PODER
       );
 
-      if (powerResult1 > powerResult2 && character2.PONTOS > 0) {
-        console.log(
-          `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto!`
-        );
+      const penalty = Math.random() < 0.5 ? -1 : -2; // Casco ou Bomba
+      const turbo = Math.random() < 0.5 ? 1 : 0; // turbo aleatorio
 
-        character2.PONTOS--;
+      if (powerResult1 > powerResult2) {
+        console.log(`${character1.NOME} venceu o confronto!`);
+        if (character2.PONTOS > 0) {
+          character2.PONTOS += penalty;
+          console.log(
+            `${character2.NOME} recebeu um ${
+              penalty === -1 ? "casco (-1)" : "bomba (-2)"
+            }!`
+          );
+        }
+        if (turbo === 1) {
+          character1.PONTOS++;
+          console.log(`${character1.NOME} ganhou um TURBO! (+1 ponto extra)`);
+        }
+      } else if (powerResult2 > powerResult1) {
+        console.log(`${character2.NOME} venceu o confronto!`);
+        if (character1.PONTOS > 0) {
+          character1.PONTOS += penalty;
+          console.log(
+            `${character1.NOME} recebeu um ${
+              penalty === -1 ? "casco (-1)" : "bomba (-2)"
+            }!`
+          );
+        }
+        if (turbo === 1) {
+          character2.PONTOS++;
+          console.log(`${character2.NOME} ganhou um TURBO! (+1 ponto extra)`);
+        }
+      } else {
+        console.log("Confronto deu EMPATE! Nenhum ponto perdido.");
       }
-
-      if (powerResult2 > powerResult1 && character1.PONTOS > 0) {
-        console.log(
-          `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto!`
-        );
-        character1.PONTOS--;
-      }
-
-      console.log(
-        powerResult1 === powerResult2
-          ? "Confronto deu EMPATE! Nenhum ponto perdido."
-          : ""
-      );
     }
 
     //Verificar o vencedor
