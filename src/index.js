@@ -124,13 +124,17 @@ const playRaceEngine = async (character1, character2) => {
       );
 
       if (powerResult1 > powerResult2 && character2.PONTOS > 0) {
-        console.log(`${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto!`);
-        
+        console.log(
+          `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto!`
+        );
+
         character2.PONTOS--;
       }
 
       if (powerResult2 > powerResult1 && character1.PONTOS > 0) {
-        console.log(`${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto!`);
+        console.log(
+          `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto!`
+        );
         character1.PONTOS--;
       }
 
@@ -155,6 +159,20 @@ const playRaceEngine = async (character1, character2) => {
   }
 };
 
+const declareWinner = async (character1, character2) => {
+  console.log(`Resultado final:`);
+  console.log(`${character1.NOME}: ${character1.PONTOS} ponto(s)`);
+  console.log(`${character2.NOME}: ${character2.PONTOS} ponto(s)`);
+
+  if (character1.PONTOS > character2.PONTOS) {
+    console.log(`\n ${character1.NOME} Venceu a corrida!! Parabens!`);
+  } else if (character2.PONTOS > character1.PONTOS) {
+    console.log(`\n ${character2.NOME} Venceu a corrida!! Parabens!`);
+  } else {
+    console.log(`A corrida terminou em EMPATE!!`);
+  }
+};
+
 // Cada corrida consiste em 5 rodadas de um bloco de pistas aleatorios (reta, curva ou confornto)
 
 // A funcão main vai chamar as outras funcoes, sendo ela a principal/ funcao de entrada
@@ -165,4 +183,6 @@ const playRaceEngine = async (character1, character2) => {
   );
 
   await playRaceEngine(player1, player2);
+
+  await declareWinner(player1, player2);
 })();
