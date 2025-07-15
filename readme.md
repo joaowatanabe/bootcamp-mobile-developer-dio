@@ -107,3 +107,30 @@
 - confroto
   - sortear aleatoriamente se é um casco(-1 ponto) ou um bomba(-2 pontos)
   - quem vence o confronto ganha um turbo (+ 1ponto) aleatoriamente
+
+---
+
+## 👾 Como jogar
+
+### Pré-requisitos:
+
+- Ter o **Node.js** instalado na sua máquina
+- Estar com o terminal dentro da pasta do projeto
+
+### Passo a passo:
+
+1. Instale o `prompt-sync` (caso ainda não tenha):
+
+   ```bash
+   npm install prompt-sync
+   ```
+
+2. Rode o jogo com o seguinte comando:
+
+   ```bash
+   node ./src/index.js
+   ```
+
+3. Siga as instruções no terminal para escolher os personagens e acompanhar a corrida rodada por rodada!
+
+---
